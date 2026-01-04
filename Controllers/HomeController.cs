@@ -18,7 +18,7 @@ namespace TinyMCEEditorLeftSidebarWebApplication.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Editor()
         {
             return View();
         }
