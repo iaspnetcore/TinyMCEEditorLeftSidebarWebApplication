@@ -15,20 +15,26 @@
     <style>
         body {
             margin: 0;
-            font-family: -apple-system,BlinkMacSystemFont;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI";
         }
 
         .editor-page {
             display: flex;
             height: 100vh;
+            background: #f6f7f8;
         }
 
         .editor-sidebar {
             width: 240px;
+            background: #fff;
             border-right: 1px solid #e5e6eb;
             padding: 12px;
-            background: #fff;
             overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
         .editor-main {
@@ -36,14 +42,62 @@
             padding: 12px;
         }
 
-        .editor-sidebar li {
-            cursor: pointer;
-            padding: 4px 0;
+        .save-btn {
+            margin-top: 8px;
         }
 
+        /* TinyMCE 填满 */
         .tox-tinymce {
-            height: 100% !important;
+            height: calc(100% - 40px) !important;
         }
+
+        /* 大纲样式 */
+        .outline-tree {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 13px;
+        }
+
+            .outline-tree li {
+                cursor: pointer;
+                padding: 4px 6px;
+                border-radius: 4px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+                .outline-tree li:hover {
+                    background: #f0f4ff;
+                }
+
+        /* H1-H6 层级 */
+        .outline-level-1 {
+            padding-left: 0;
+            font-weight: bold;
+        }
+
+        .outline-level-2 {
+            padding-left: 12px;
+        }
+
+        .outline-level-3 {
+            padding-left: 24px;
+        }
+
+        .outline-level-4 {
+            padding-left: 36px;
+        }
+
+        .outline-level-5 {
+            padding-left: 48px;
+        }
+
+        .outline-level-6 {
+            padding-left: 60px;
+        }
+
     </style>
 </head>
 
@@ -79,17 +133,29 @@
             }
         });
 
-        function updateOutline(editor) {
+               function updateOutline(editor) {
             const outline = document.getElementById('outlineList');
             outline.innerHTML = '';
 
-            editor.getBody().querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(h => {
+            const headers = editor.getBody()
+                .querySelectorAll('h1,h2,h3,h4,h5,h6');
+
+            headers.forEach((h, index) => {
+                if (!h.id) {
+                    h.id = 'heading-' + index;
+                }
+
+                const level = parseInt(h.tagName.substring(1));
+
                 const li = document.createElement('li');
-                li.innerText = h.innerText;
+                li.className = 'outline-level-' + level;
+                li.textContent = h.innerText.trim() || `[H${level}] 未命名`;
+
                 li.onclick = () => {
                     editor.selection.select(h);
                     editor.selection.scrollIntoView(h);
                 };
+
                 outline.appendChild(li);
             });
         }
