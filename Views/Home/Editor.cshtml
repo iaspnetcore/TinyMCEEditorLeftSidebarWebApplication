@@ -98,6 +98,11 @@
             padding-left: 60px;
         }
 
+        .outline-tree li.active {
+            background: #e8f0ff;
+            color: #1763ff;
+            font-weight: 500;
+
     </style>
 </head>
 
@@ -105,15 +110,17 @@
     <form method="post" asp-action="Save">
 
         <div class="editor-page">
-            <div class="editor-sidebar">
-                <strong>文章大纲</strong>
-                <ul id="outlineList"></ul>
-            </div>
+            <!-- 左侧大纲 -->
+            <aside class="editor-sidebar">
+                <div class="sidebar-title">文章结构</div>
+                <ul id="outlineList" class="outline-tree"></ul>
+            </aside>
 
-            <div class="editor-main">
+            <!-- 编辑器 -->
+            <main class="editor-main">
                 <textarea id="editor" name="content"></textarea>
-                <button type="submit">保存</button>
-            </div>
+                <button class="save-btn" type="submit">保存</button>
+            </main>
         </div>
 
     </form>
@@ -124,16 +131,18 @@
             height: '100%',
             menubar: false,
             plugins: 'lists link image code',
-            toolbar: 'undo redo | h1 h2 h3 | bold italic | bullist numlist | code',
+            toolbar:
+                'undo redo | h1 h2 h3 h4 h5 h6 | ' +
+                'bold italic underline | bullist numlist | code',
 
             setup: function (editor) {
-                editor.on('Change KeyUp', function () {
+                editor.on('NodeChange Change KeyUp', function () {
                     updateOutline(editor);
                 });
             }
         });
 
-               function updateOutline(editor) {
+        function updateOutline(editor) {
             const outline = document.getElementById('outlineList');
             outline.innerHTML = '';
 
@@ -162,4 +171,6 @@
     </script>
 
 </body>
+
+
 </html>

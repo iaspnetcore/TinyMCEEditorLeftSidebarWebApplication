@@ -1,5 +1,6 @@
 # TinyMCEEditorLeftSidebarWebApplication
 
+## How to display table of contents on the left side of TinyMCE while editing.
 
  project_name="TinyMCEEditorLeftSidebarWebApplication"
 
